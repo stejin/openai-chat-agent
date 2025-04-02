@@ -16,8 +16,8 @@ from openai.types.chat import ChatCompletionMessage
 from tenacity import retry, stop_after_attempt, wait_exponential
 
 # Import our custom modules
-from src.config import get_openai_client
-from src.utils import setup_logger, handle_api_error
+from config import create_openai_client
+from utils import setup_logger, APIErrorHandler, safe_execute
 
 # Set up logging
 logger = setup_logger(__name__)
@@ -41,7 +41,7 @@ class ChatAgent:
             model: The OpenAI model to use for chat completions
             system_prompt: Optional system prompt to set the behavior of the assistant
         """
-        self.client = get_openai_client()
+        self.client = create_openai_client()
         self.model = model
         self.conversation_history: List[Dict[str, str]] = []
         
@@ -127,9 +127,9 @@ class ChatAgent:
             return assistant_message
             
         except Exception as e:
-            # Handle API errors (this will be logged by the decorator)
-            error_msg = handle_api_error(e)
-            logger.error(f"Error sending message: {error_msg}")
+            # Handle API errors (this will be logged by the handler)
+            error_info = APIErrorHandler.handle_error(e)
+            logger.error(f"Error sending message: {error_info['message']}")
             raise
     
     def get_conversation_history(self) -> List[Dict[str, str]]:
@@ -190,7 +190,7 @@ def main():
     Main function to run the chat agent from the command line.
     
     Usage:
-        python -m src.main --model gpt-3.5-turbo --system "You are a helpful assistant."
+        python -m main --model gpt-3.5-turbo --system "You are a helpful assistant."
     """
     parser = argparse.ArgumentParser(description='Chat with OpenAI API')
     parser.add_argument('--model', type=str, default='gpt-3.5-turbo', 

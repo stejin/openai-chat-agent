@@ -1,5 +1,97 @@
 # OpenAI Chat Agent
 
+A command-line interface for interacting with OpenAI's chat models.
+
+## Setup Instructions
+
+### 1. Get an OpenAI API Key
+
+To use this tool, you'll need an API key from OpenAI:
+
+1. Visit [OpenAI's website](https://platform.openai.com/signup) and create an account if you don't have one.
+2. Navigate to the [API Keys section](https://platform.openai.com/api-keys) in your account dashboard.
+3. Click "Create new secret key" and give it a name.
+4. Copy the generated API key immediately (you won't be able to see it again).
+
+### 2. Set Up Your Environment Variables
+
+This project uses a `.env` file to securely store your API key:
+
+1. Locate the `.env` file in the root directory of this project.
+2. Open it with a text editor.
+3. Update the `OPENAI_API_KEY` value with your actual API key:
+
+```
+OPENAI_API_KEY=sk-your-actual-api-key-here
+```
+
+### 3. API Key Format
+
+OpenAI API keys follow this format:
+- Always start with `sk-`
+- Followed by a string of alphanumeric characters
+- Example: `sk-abcdefghijklmnopqrstuvwxyz123456`
+
+**Important**: Never share your API key or commit it to version control.
+
+## Installation
+
+Install the required dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+For development:
+
+```bash
+pip install -e .
+```
+
+## Basic Usage
+
+Run the CLI tool:
+
+```bash
+python src/main.py
+```
+
+### Available Commands and Options
+
+- Start a conversation: `python src/main.py`
+- Specify a different model: `python src/main.py --model gpt-4`
+- Adjust temperature: `python src/main.py --temperature 0.7`
+
+### Available Model Options
+
+The default model is `gpt-3.5-turbo`, but you can specify any available OpenAI model:
+
+- `gpt-3.5-turbo` - Default model, good balance of capability and speed
+- `gpt-4o` - More advanced model with enhanced reasoning capabilities
+
+Example usage:
+```bash
+python src/main.py --model gpt-4o
+```
+
+You can use any model that's available in the OpenAI API and that your API key has access to.
+
+### Example Conversation
+
+```
+You: Hello, how can you help me today?
+Assistant: I'm an AI assistant and I can help you with various tasks like answering questions, 
+           providing information, creative writing, and more. What would you like assistance with today?
+```
+
+## Troubleshooting
+
+- **API Key Error**: Ensure your API key is properly formatted and valid.
+- **Rate Limiting**: The tool includes retry logic for API rate limits.
+- **Import Errors**: Make sure you've installed the package in development mode using `pip install -e .`
+
+# OpenAI Chat Agent
+
 A Python-based chat agent that leverages OpenAI's API to create conversational AI experiences.
 
 ## Project Description

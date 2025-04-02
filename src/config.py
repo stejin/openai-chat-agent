@@ -7,6 +7,8 @@ and setting up the OpenAI client for use throughout the application.
 
 import os
 from typing import Optional
+import certifi
+import httpx
 
 from dotenv import load_dotenv
 from openai import OpenAI, APIError
@@ -45,7 +47,19 @@ def create_openai_client() -> OpenAI:
     """
     try:
         api_key = get_openai_api_key()
-        client = OpenAI(api_key=api_key)
+        cert_path = r"C:\Users\slehmann\Projects\n8n\cacert.pem"
+        transport = httpx.HTTPTransport(
+            verify=cert_path,  # Use your specific cert file
+            trust_env=True  # This will use environment proxy settings
+        )
+        client = OpenAI(
+            api_key=api_key,
+            http_client=httpx.Client(
+                transport=transport,
+                trust_env=True,  # Use system proxy settings
+                verify=cert_path  # Use your specific cert file
+            )
+        )
         return client
     except ValueError as e:
         # Re-raise the error with the same message
